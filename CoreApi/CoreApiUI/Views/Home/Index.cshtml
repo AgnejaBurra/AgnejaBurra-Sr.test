@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>  
+<html>  
+<head>  
+    <title></title>  
+    <meta charset="utf-8" />  
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<style>
+    .displayNone{
+        display:none;
+    }
+</style>
+   <script>  
+    $(document).ready(function () { 
+         loadData();
+        bindManager();
+        bindSupervisor();
+       
+        
+        $('input[type=radio][name=employeeType]').change(function() {
+            if (this.value == 'manager') {
+               $('#divPayPerHour').addClass('displayNone');
+               $('#divAnnualSalary').removeClass('displayNone');
+               $('#divMaxExpenseAmount').removeClass('displayNone');
+            }
+            else if (this.value == 'supervisor') {
+                $('#divPayPerHour').addClass('displayNone');
+               $('#divAnnualSalary').addClass('displayNone');
+               $('#divMaxExpenseAmount').removeClass('displayNone');
+            }else{
+                $('#divPayPerHour').removeClass('displayNone');
+               $('#divAnnualSalary').addClass('displayNone');
+               $('#divMaxExpenseAmount').addClass('displayNone');
+            }
+        });
+    }); 
+    
+    function loadData(){
+         $.ajax({  
+            type: "GET",  
+            url: "https://localhost:44326/api/Employee",  
+            contentType: "application/json; charset=utf-8",  
+            dataType: "json",  
+            success: function (data) {  
+                //alert(JSON.stringify(data));                  
+                $("#DIV").html('');   
+                var DIV = '';  
+                $.each(data, function (i, item) {  
+                    var rows = "<tr>" +  
+                        "<td>" + item.employeeID + "</td>" +  
+                        "<td>" + item.employeeName + "</td>" +  
+                        "<td>" + item.employeeAddress1 + "</td>" +  
+                        "<td>" + item.payPerHour + "</td>" +  
+
+                        "<td>" + item.managerName + "</td>" + 
+                        "<td>" + item.managerAddress1 + "</td>" + 
+                        "<td>" + item.managerAnnualSalary + "</td>" + 
+                         "<td>" + item.maxExpenseAmount + "</td>" + 
+
+                        "<td>" + item.supervisorName + "</td>" + 
+                         "<td>" + item.supervisorAddress1 + "</td>" + 
+                          "<td>" + item.supervisorAnnualSalary + "</td>" + 
+                        "</tr>";  
+                    $('#Table').append(rows);  
+                }); //End of foreach Loop   
+                console.log(data);  
+            }, //End of AJAX Success function  
+  
+            failure: function (data) {  
+                alert(data.responseText);  
+            }, //End of AJAX failure function  
+            error: function (data) {  
+                alert(data.responseText);  
+            } //End of AJAX error function  
+  
+        }); 
+    }
+    function bindManager(){
+
+        var ddlManager = $('#ddlManager');  
+        ddlManager.append($("<option></option>").val('').html('Please Select Manager'));  
+        $.ajax({  
+            url: 'https://localhost:44326/api/Employee/GetManagerList',  
+            type: 'GET',  
+            dataType: 'json',  
+            success: function (d) {  
+                $.each(d, function (i, val) {  
+                    ddlManager.append($("<option></option>").val(val.managerID).html(val.managerName));  
+                });  
+            },  
+            error: function () {  
+                alert('Error!');  
+            }  
+        });  
+    }
+
+    function bindSupervisor(){
+
+         var ddlSupervisor = $('#ddlSupervisor');  
+        ddlSupervisor.append($("<option></option>").val('').html('Please Select Supervisor'));  
+        $.ajax({  
+            url: 'https://localhost:44326/api/Employee/GetManagerList',  
+            type: 'GET',  
+            dataType: 'json',  
+            success: function (d) {  
+                $.each(d, function (i, val) {  
+                    ddlSupervisor.append($("<option></option>").val(val.managerID).html(val.managerName));  
+                });  
+            },  
+            error: function () {  
+                alert('Error!');  
+            }  
+        });  
+    }
+
+    //Add Data Function   
+function Add() {  
+    
+    var isManager=false;
+    var isSupervisor=false;
+    var managerId=0;
+    var supervisorId=0;
+    var employeeType =$('input[type=radio][name=employeeType]:checked').val();
+    if(employeeType=='manager'){
+        isManager=true;
+       
+    }else if(employeeType=='supervisor'){
+        isSupervisor=true;
+         supervisorId=$('#ddlSupervisor').val();
+    }else{
+         managerId=$('#ddlManager').val();
+         supervisorId=$('#ddlSupervisor').val();
+    }
+
+    var empObj = {  
+        EmployeeID: $('#EmployeeID').val(),  
+        FirstName: $('#FirstName').val(),  
+        LastName: $('#LastName').val(),  
+        Address1: $('#Address1').val(),  
+        PayPerHour: $('#PayPerHour').val() ,
+        ManagerID: managerId ,
+        SupervisorID: supervisorId ,
+        AnnualSalary: $('#AnnualSalary').val() ,
+        MaxExpenseAmount: $('#MaxExpenseAmount').val() ,
+         IsManager: isManager ,
+          IsSupervisor: isSupervisor ,
+    };  
+    $.ajax({  
+        url: "https://localhost:44326/api/Employee/AddEmployee",  
+        data: JSON.stringify(empObj),  
+        type: "POST",  
+        contentType: "application/json;charset=utf-8",  
+        dataType: "json",  
+        success: function (result) {  
+            //loadData();  
+            location.reload();
+            $('#myModal').modal('hide');  
+        },  
+        error: function (errormessage) {  
+            alert(errormessage.responseText);  
+        }  
+    });  
+}  
+  
+</script> 
+</head>  
+<body>  
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add New Employee</button><br /><br />  
+<br />
+   <div class="panel panel-primary">  
+    <div class="panel-heading">  
+    </div>   <!--en dof panel-heading -->
+    </div>
+    <div class="panel-body">  
+        <table class="table table-bordered" id="Table">  
+            <tr>  
+                <th>EmployeeID</th>  
+                <th>EmployeeName</th>  
+                <th>EmployeeAddress1</th>  
+                <th>PayPerHour</th>  
+
+                 <th>ManagerName</th> 
+                  <th>ManagerAddress1</th> 
+                   <th>ManagerAnnualSalary</th> 
+                     <th>MaxExpenseAmount</th> 
+                   
+                    <th>SupervisorName</th>  
+                  <th>SupervisorAddress1</th>  
+                    <th>SupervisorAnnualSalary</th>  
+            </tr>   <!--end of table-row -->
+        </table>   <!--end of table -->
+    </div> <!--end of Panel-body -->      
+<!--end of Panel -->  
+
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">  
+        <div class="modal-dialog">  
+            <div class="modal-content">  
+                <div class="modal-header">  
+                    <button type="button" class="close" data-dismiss="modal">×</button>  
+                    <h4 class="modal-title" id="myModalLabel">Add Employee</h4>  
+                </div>  
+                <div class="modal-body">
+
+                    <div class="form-group">  
+                            <label for="EmployeeId">EmployeeId</label>  
+                            <input type="text" class="form-control" id="EmployeeID" placeholder="Id" disabled="disabled"/>  
+                        </div>  
+                        <div class="form-group">  
+                            <label>First Name</label>  
+                            <input type="text" class="form-control" id="FirstName" placeholder="First Name"/>  
+                        </div>  
+                        <div class="form-group">  
+                            <label>Last Name</label>  
+                            <input type="text" class="form-control" id="LastName" placeholder="Last Name"/>  
+                        </div>  
+                         <div class="form-group">  
+                            <label>Address 1</label>  
+                            <input type="text" class="form-control" id="Address1" placeholder="Address 1"/>  
+                        </div>
+
+                          <div class="form-group">  
+                           <p>Please select Employee Type:</p>
+                            <input type="radio"checked id="rdemployee" name="employeeType" value="employee">
+                            <label>Employee</label><br>
+                            <input type="radio" id="rdmanager" name="employeeType" value="manager">
+                            <label>Manager</label><br>
+                            <input type="radio" id="rdsupervisor" name="employeeType" value="supervisor">
+                            <label>Supervisor</label>
+                        </div> 
+
+                         <div class="form-group" id="divPayPerHour">  
+                            <label>Pay Per Hour</label>  
+                            <input type="number" class="form-control" id="PayPerHour" placeholder="PayPerHour"/>  
+                        </div>
+                         <div class="form-group displayNone" id="divAnnualSalary">  
+                            <label>Annual Salary</label>  
+                            <input type="number" class="form-control" id="AnnualSalary" placeholder="Annual Salary"/>  
+                        </div>
+                        <div class="form-group displayNone" id="divMaxExpenseAmount">  
+                            <label>Max ExpenseAmount</label>  
+                            <input type="number" class="form-control" id="MaxExpenseAmount" placeholder="Max ExpenseAmount"/>  
+                        </div> 
+                        
+                        <div class="form-group" id="divddlManager">  
+                            <label class="col-md-4 control-label">Manager</label>  
+                            <div class="col-md-6">  
+                                <select class="form-control" id="ddlManager"></select><br />  
+                            </div>  
+                        </div> 
+
+                          <div class="form-group" id="divddlSupervisor">  
+                            <label class="col-md-4 control-label">Supervisor</label>  
+                            <div class="col-md-6">  
+                                <select class="form-control" id="ddlSupervisor"></select><br />  
+                            </div>  
+                        </div> 
+                       
+
+                    </div>  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add</button>  
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+                </div>  
+            </div>  
+        </div>          
+    </div>  
+</body>  
+
+
+</html> 

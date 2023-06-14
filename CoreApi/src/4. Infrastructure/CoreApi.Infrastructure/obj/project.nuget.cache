@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "xfF7ZQ+c18kFolFgW/WFsTI9ZmyMVVLQ+dIC+NUThC1pKWztixk++rpOigZ7R75bzLGJsH52G0oWf1RKqQiWxw==",
+  "success": true,
+  "projectFilePath": "E:\\Project\\CoreApi-28-02-2020\\AgnejaDemo\\CoreApi-28-02-2020\\CoreApi\\src\\4. Infrastructure\\CoreApi.Infrastructure\\CoreApi.Infrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

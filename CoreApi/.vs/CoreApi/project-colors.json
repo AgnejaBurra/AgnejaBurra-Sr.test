@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a30690a1-6d4b-43f7-b4e4-ccaa02031819": {
+      "ProjectGuid": "a30690a1-6d4b-43f7-b4e4-ccaa02031819",
+      "DisplayName": "CoreApi.WebAPI",
+      "ColorIndex": 0
+    },
+    "ca0a7209-1e0b-44cc-ab68-6e71cf581f39": {
+      "ProjectGuid": "ca0a7209-1e0b-44cc-ab68-6e71cf581f39",
+      "DisplayName": "CoreApi.BussinessLogic",
+      "ColorIndex": 1
+    },
+    "303ee3be-c2b2-489f-a434-fef06daf6297": {
+      "ProjectGuid": "303ee3be-c2b2-489f-a434-fef06daf6297",
+      "DisplayName": "CoreApi.DataAccess",
+      "ColorIndex": 2
+    },
+    "3550d0c5-e50d-4af6-8091-ee5e18997d24": {
+      "ProjectGuid": "3550d0c5-e50d-4af6-8091-ee5e18997d24",
+      "DisplayName": "CoreApi.Infrastructure",
+      "ColorIndex": 3
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "062066cd-4c8a-4f2e-8700-8dee35977cd8": {
+      "ProjectGuid": "062066cd-4c8a-4f2e-8700-8dee35977cd8",
+      "DisplayName": "CoreApiUI",
+      "ColorIndex": 4
+    }
+  },
+  "NextColorIndex": 5
+}
